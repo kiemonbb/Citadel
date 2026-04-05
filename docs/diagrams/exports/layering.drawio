@@ -1,0 +1,46 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="YR2Ls-mv-2t3vS-aqJm-">
+    <mxGraphModel dx="533" dy="742" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="E3sfVgPsSliWsdVqtsua-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;strokeWidth=3;" value="Timekeeping Manager" vertex="1">
+          <mxGeometry height="60" width="120" x="170" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;fontSize=20;" value="UI Rendering" vertex="1">
+          <mxGeometry height="100" width="320" x="170" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;fontSize=20;" value="Display Driver" vertex="1">
+          <mxGeometry height="60" width="160" x="320" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;fontSize=20;" value="SPI Driver" vertex="1">
+          <mxGeometry height="60" width="190" x="310" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;fontSize=20;" value="SPI" vertex="1">
+          <mxGeometry height="60" width="70" x="355" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;strokeWidth=3;" value="RTC Driver" vertex="1">
+          <mxGeometry height="60" width="90" x="190" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;strokeWidth=3;" value="I2C Driver" vertex="1">
+          <mxGeometry height="60" width="110" x="180" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;strokeWidth=3;" value="I2C" vertex="1">
+          <mxGeometry height="60" width="70" x="200" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-27" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;" value="&lt;div&gt;&lt;font style=&quot;font-size: 20px;&quot;&gt;UI State Machine&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="170" x="500" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-29" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;fontSize=20;" value="Button Driver" vertex="1">
+          <mxGeometry height="60" width="100" x="550" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-30" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;fontSize=20;" value="Input Handler" vertex="1">
+          <mxGeometry height="60" width="130" x="530" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="E3sfVgPsSliWsdVqtsua-34" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;fontSize=20;" value="GPIO" vertex="1">
+          <mxGeometry height="60" width="70" x="565" y="580" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
