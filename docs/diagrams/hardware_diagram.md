@@ -1,7 +1,7 @@
 # Hardware Block Diagram
 
 ## Key components
-- CPU with an 32.768 kHz oscillator
+- MCU with an 32.768 kHz oscillator
 - OLED/E-paper display
 - Input button
 - Precise Real-Time Clock (~2ppm)
