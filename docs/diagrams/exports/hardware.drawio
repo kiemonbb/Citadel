@@ -1,19 +1,11 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Page-1" id="7VwOixTUFaN6EbK5ETZt">
-    <mxGraphModel dx="794" dy="707" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="441" dy="637" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="NBVb3Ko_LRreuVObTbld-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Main Processor&lt;/font&gt;" vertex="1">
           <mxGeometry height="250" width="250" x="300" y="350" as="geometry" />
-        </mxCell>
-        <mxCell id="NBVb3Ko_LRreuVObTbld-10" edge="1" parent="1" source="NBVb3Ko_LRreuVObTbld-2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;curved=0;" target="NBVb3Ko_LRreuVObTbld-11">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="220" y="410" />
-            </Array>
-            <mxPoint x="230" y="400" as="targetPoint" />
-          </mxGeometry>
         </mxCell>
         <mxCell id="NBVb3Ko_LRreuVObTbld-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;SPI&lt;/font&gt;" vertex="1">
           <mxGeometry height="40" width="70" x="300" y="390" as="geometry" />
@@ -28,21 +20,16 @@
           <mxGeometry height="50" width="80" x="470" y="385" as="geometry" />
         </mxCell>
         <mxCell id="NBVb3Ko_LRreuVObTbld-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Display&lt;/font&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="160" y="445" as="geometry" />
+          <mxGeometry height="60" width="120" x="110" y="380" as="geometry" />
         </mxCell>
         <mxCell id="NBVb3Ko_LRreuVObTbld-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Button&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="120" x="600" y="380" as="geometry" />
         </mxCell>
-        <mxCell id="NBVb3Ko_LRreuVObTbld-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Flash&lt;/font&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="160" y="310" as="geometry" />
-        </mxCell>
-        <mxCell id="NBVb3Ko_LRreuVObTbld-13" edge="1" parent="1" source="NBVb3Ko_LRreuVObTbld-2" style="endArrow=classic;html=1;rounded=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=0;strokeWidth=3;" target="NBVb3Ko_LRreuVObTbld-4" value="">
+        <mxCell id="NBVb3Ko_LRreuVObTbld-13" edge="1" parent="1" source="NBVb3Ko_LRreuVObTbld-2" style="endArrow=classic;html=1;rounded=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;curved=0;strokeWidth=3;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="NBVb3Ko_LRreuVObTbld-4" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <Array as="points">
-              <mxPoint x="220" y="410" />
-            </Array>
+            <Array as="points" />
             <mxPoint x="350" y="550" as="sourcePoint" />
-            <mxPoint x="400" y="500" as="targetPoint" />
+            <mxPoint x="250" y="410" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="NBVb3Ko_LRreuVObTbld-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;I2C&lt;/font&gt;" vertex="1">
