@@ -1,0 +1,4 @@
+-Ivendor/cmsis
+-Ivendor/device
+-Istartup
+-Isrc/config

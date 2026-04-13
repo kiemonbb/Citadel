@@ -71,7 +71,7 @@ extern "C" {
     /* #define STM32L010xB */   /*!< STM32L010RB Devices                                                                                                                                   */
     /* #define STM32L011xx */   /*!< STM32L031C6, STM32L031E6, STM32L031F6, STM32L031G6, STM32L031K6 Devices                                                                               */
     /* #define STM32L021xx */   /*!< STM32L021D4, STM32L021F4, STM32L021G4, STM32L021K4 Devices                                                                                            */
-    /* #define STM32L031xx */   /*!< STM32L031C6, STM32L031E6, STM32L031F6, STM32L031G6, STM32L031K6 Devices                                                                               */
+     #define STM32L031xx    /*!< STM32L031C6, STM32L031E6, STM32L031F6, STM32L031G6, STM32L031K6 Devices                                                                               */
     /* #define STM32L041xx */   /*!< STM32L041C6, STM32L041K6, STM32L041G6, STM32L041F6, STM32L041E6 Devices                                                                               */
     /* #define STM32L051xx */   /*!< STM32L051K8, STM32L051C6, STM32L051C8, STM32L051R6, STM32L051R8, STM32L051K6, STM32L051T6, STM32L051T8 Devices                                        */
     /* #define STM32L052xx */   /*!< STM32L052K6, STM32L052K8, STM32L052C6, STM32L052C8, STM32L052R6, STM32L052R8, STM32L052T6, STM32L052T8 Devices                                        */
