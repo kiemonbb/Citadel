@@ -2,3 +2,4 @@
 -Ivendor/device
 -Istartup
 -Isrc/config
+-Isrc/sys
