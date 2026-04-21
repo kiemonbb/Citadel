@@ -3,7 +3,6 @@
 #include "systick.h"
 int main(void) {
   systick_open();
-  uart_open();
 
   RCC->IOPENR |= RCC_IOPENR_GPIOBEN;
   (void)RCC->IOPENR;
