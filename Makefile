@@ -1,7 +1,7 @@
 CC = arm-none-eabi-gcc
 OBJCOPY = arm-none-eabi-objcopy
 
-SRC_C = $(wildcard src/sys/*.c) startup/system_stm32l0xx.c src/main.c
+SRC_C = $(wildcard src/sys/*.c) $(wildcard src/hal/*.c) startup/system_stm32l0xx.c src/main.c 
 SRC_AS = startup/startup_stm32l031k6tx.s
 OBJ = $(SRC_C:.c=.o) $(SRC_AS:.s=.o)
 
