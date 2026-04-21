@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+// TODO: implement extensive error handling
+
 void spi_hal_open(spi_mode_t mode, spi_baud_divider_t baud_divider) {
   // MOSI PORT
   SPI_PORT->MODER &= ~(0x3U << (SPI_MOSI_PIN * 2));
