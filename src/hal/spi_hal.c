@@ -4,9 +4,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
+extern uint32_t systick_ms;
+
 // TODO: implement extensive error handling
 
-void spi_hal_open(spi_mode_t mode, spi_baud_divider_t baud_divider) {
+spi_status_t spi_hal_open(spi_mode_t mode, spi_baud_divider_t baud_divider) {
 
   RCC->IOPENR |= RCC_IOPENR_GPIOBEN;
   (void)RCC->IOPENR;
@@ -50,23 +52,37 @@ void spi_hal_open(spi_mode_t mode, spi_baud_divider_t baud_divider) {
   SPI1->CR2 &= ~SPI_CR2_FRF;
 
   SPI1->CR1 |= SPI_CR1_SPE;
+
+  return SPI_OK;
 }
 
-void spi_hal_write(const uint8_t *data, size_t length) {
+spi_status_t spi_hal_write(const uint8_t *data, size_t length,
+                           uint32_t timeout_ms) {
   for (uint32_t i = 0; i < length; i++) {
-    spi_hal_transfer_byte(data[i]);
+    spi_status_t byte_status = spi_hal_transfer_byte(data[i], timeout_ms);
+    if (byte_status != SPI_OK)
+      return byte_status;
   }
   while (!(SPI1->SR & SPI_SR_TXE))
     ;
   while (SPI1->SR & SPI_SR_BSY)
     ;
 }
-void spi_hal_transfer_byte(uint8_t byte) {
-  while (!(SPI1->SR & SPI_SR_TXE))
-    ;
+spi_status_t spi_hal_transfer_byte(uint8_t byte, uint32_t timeout_ms) {
+  uint32_t deadline = systick_ms + timeout_ms;
+  while (!(SPI1->SR & SPI_SR_TXE)) {
+    if ((timeout_ms == SPI_NO_DELAY) ||
+        (timeout_ms != SPI_MAX_DELAY && systick_ms >= deadline))
+      return SPI_ERROR_TIMEOUT;
+  }
   *(volatile uint8_t *)&SPI1->DR = byte;
 
-  while (!(SPI1->SR & SPI_SR_RXNE))
-    ;
+  while (!(SPI1->SR & SPI_SR_RXNE)) {
+    if ((timeout_ms == SPI_NO_DELAY) ||
+        (timeout_ms != SPI_MAX_DELAY && systick_ms >= deadline))
+      return SPI_ERROR_TIMEOUT;
+  }
   (void)SPI1->DR;
+
+  return SPI_OK;
 }
