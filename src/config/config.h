@@ -35,4 +35,10 @@
 #define DEBOUNCE_MS 50
 #define DISPLAY_ON_MS 5000
 
+typedef enum {
+  HAL_OK = 0,
+  HAL_ERROR_TIMEOUT,
+  HAL_ERROR_INVALID_PARAM,
+} hal_status_t;
+
 #endif
