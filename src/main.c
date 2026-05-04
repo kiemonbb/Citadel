@@ -1,17 +1,19 @@
 #include "config.h"
 #include "hal/gpio_hal.h"
+#include "hal/spi_hal.h"
 #include "stm32l031xx.h"
 #include "systick.h"
 int main(void) {
   systick_open();
+  spi_hal_open(SPI_CLOCK_MODE_0, SPI_BAUD_DIV_8);
 
-  gpio_hal_init_output(USER_LED_PORT, USER_LED_PIN, GPIO_PULL_UP);
+  uint8_t test[] = {0xA5, 0xDE, 0x55, 0xAA};
 
   while (1) {
-    gpio_hal_write(USER_LED_PORT, USER_LED_PIN, 1);
-    delay_ms(500);
-    gpio_hal_write(USER_LED_PORT, USER_LED_PIN, 0);
-    delay_ms(500);
+    spi_hal_cs_assert();
+    spi_hal_write(test, 4, SPI_MAX_DELAY);
+    spi_hal_cs_deassert();
+    delay_ms(1000);
   }
   return 0;
 }
