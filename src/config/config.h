@@ -16,6 +16,7 @@
 /* SPI */
 #define SPI_MOSI_PIN 5
 #define SPI_SCK_PIN 3
+#define SPI_CS_PIN 6
 #define SPI_AF 0
 
 #define SPI_NO_DELAY 0

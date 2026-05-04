@@ -31,4 +31,8 @@ hal_status_t spi_hal_write(const uint8_t *data, size_t length,
 
 hal_status_t spi_hal_transfer_byte(uint8_t byte, uint32_t timeout_ms);
 
+void spi_hal_cs_assert(void); 
+
+void spi_hal_cs_deassert(void); 
+
 #endif

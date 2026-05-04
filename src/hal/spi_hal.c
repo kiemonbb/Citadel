@@ -39,17 +39,31 @@ hal_status_t spi_hal_open(spi_mode_t mode, spi_baud_divider_t baud_divider) {
   SPI_PORT->AFR[0] &= ~(0xFU << (SPI_SCK_PIN * 4));
   SPI_PORT->AFR[0] |= (SPI_AF << (SPI_SCK_PIN * 4));
 
+  // CS
+  SPI_PORT->MODER &= ~(0x3U << (SPI_CS_PIN * 2));
+  SPI_PORT->MODER |= (0x1U << (SPI_CS_PIN * 2));
+
+  SPI_PORT->OTYPER &= ~(1U << SPI_CS_PIN);
+
+  SPI_PORT->OSPEEDR &= ~(0x3U << (SPI_CS_PIN * 2));
+  SPI_PORT->OSPEEDR |= (0x2U << (SPI_CS_PIN * 2));
+
+  SPI_PORT->PUPDR &= ~(0x3U << (SPI_CS_PIN * 2));
+
+  SPI_PORT->BSRR = (1U << SPI_CS_PIN);
+
   RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
   (void)RCC->APB2ENR;
 
-  SPI1->CR1 |= (baud_divider << SPI_CR1_BR_Pos);
+  SPI1->CR1 = 0;
 
+  SPI1->CR1 |= (baud_divider << SPI_CR1_BR_Pos);
   SPI1->CR1 |= (mode | SPI_CR1_SSM | SPI_CR1_SSI | SPI_CR1_MSTR);
 
   SPI1->CR1 &= ~(SPI_CR1_BIDIMODE | SPI_CR1_LSBFIRST | SPI_CR1_CRCEN);
 
-  SPI1->CR1 &= ~SPI_CR1_DFF;
-  SPI1->CR2 &= ~SPI_CR2_FRF;
+  SPI1->CR1 &= ~(SPI_CR1_DFF);
+  SPI1->CR2 &= ~(SPI_CR2_FRF);
 
   SPI1->CR1 |= SPI_CR1_SPE;
 
@@ -67,6 +81,8 @@ hal_status_t spi_hal_write(const uint8_t *data, size_t length,
     ;
   while (SPI1->SR & SPI_SR_BSY)
     ;
+
+  return HAL_OK;
 }
 
 hal_status_t spi_hal_transfer_byte(uint8_t byte, uint32_t timeout_ms) {
@@ -87,3 +103,7 @@ hal_status_t spi_hal_transfer_byte(uint8_t byte, uint32_t timeout_ms) {
 
   return HAL_OK;
 }
+
+void spi_hal_cs_assert(void) { SPI_PORT->BRR = (1U << SPI_CS_PIN); }
+
+void spi_hal_cs_deassert(void) { SPI_PORT->BSRR = (1U << SPI_CS_PIN); }
