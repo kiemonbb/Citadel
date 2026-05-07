@@ -6,8 +6,8 @@
 
 extern uint32_t systick_ms;
 
-// TODO: implement extensive error handling
-
+/**
+ */
 hal_status_t spi_hal_open(spi_mode_t mode, spi_baud_divider_t baud_divider) {
 
   RCC->IOPENR |= RCC_IOPENR_GPIOBEN;
@@ -103,7 +103,9 @@ hal_status_t spi_hal_transfer_byte(uint8_t byte, uint32_t timeout_ms) {
 
   return HAL_OK;
 }
-
-void spi_hal_cs_assert(void) { SPI_PORT->BRR = (1U << SPI_CS_PIN); }
-
-void spi_hal_cs_deassert(void) { SPI_PORT->BSRR = (1U << SPI_CS_PIN); }
+void spi_hal_cs_set(uint8_t state) {
+  if (state)
+    SPI_PORT->BRR = (1U << SPI_CS_PIN);
+  else
+    SPI_PORT->BSRR = (1U << SPI_CS_PIN);
+}

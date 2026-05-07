@@ -28,6 +28,7 @@
 
 #define I2C_SDA_PIN 10
 #define I2C_SCL_PIN 9
+#define I2C_AF 1
 
 #define I2C_PORT GPIOA
 
@@ -40,6 +41,7 @@ typedef enum {
   HAL_OK = 0,
   HAL_ERROR_TIMEOUT,
   HAL_ERROR_INVALID_PARAM,
+  HAL_ERROR_BUSY,
 } hal_status_t;
 
 #endif

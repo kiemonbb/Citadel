@@ -10,9 +10,9 @@ int main(void) {
   uint8_t test[] = {0xA5, 0xDE, 0x55, 0xAA};
 
   while (1) {
-    spi_hal_cs_assert();
+    spi_hal_cs_set(1);
     spi_hal_write(test, 4, SPI_MAX_DELAY);
-    spi_hal_cs_deassert();
+    spi_hal_cs_set(0);
     delay_ms(1000);
   }
   return 0;
