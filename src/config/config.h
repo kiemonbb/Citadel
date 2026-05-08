@@ -28,6 +28,7 @@
 
 #define I2C_SDA_PIN 10
 #define I2C_SCL_PIN 9
+#define I2C_AF 1
 
 #define I2C_PORT GPIOA
 
