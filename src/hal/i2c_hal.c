@@ -145,7 +145,7 @@ i2c_status_t i2c_hal_read_byte(uint8_t slave_addr, uint8_t *data, uint8_t ack,
     err = i2c_wait(I2C_ISR_TCR, timeout_ms);
     if (err != I2C_OK) {
       I2C1->ICR = I2C_ICR_NACKCF;
-      I2C1->CR2 = I2C_CR2_STOP;
+      I2C1->CR2 |= I2C_CR2_STOP;
       i2c_wait(I2C_ISR_STOPF, timeout_ms);
       I2C1->ICR = I2C_ICR_STOPCF;
       _state = I2C_STATE_IDLE;
