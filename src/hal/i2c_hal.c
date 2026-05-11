@@ -5,7 +5,7 @@
 static i2c_state_t _state = I2C_STATE_IDLE;
 extern uint32_t systick_ms;
 
-i2c_status_t i2c_wait(uint32_t flag, uint32_t timeout_ms) {
+static i2c_status_t i2c_wait(uint32_t flag, uint32_t timeout_ms) {
   uint32_t deadline = systick_ms + timeout_ms;
   while (!(I2C1->ISR & flag)) {
     if (I2C1->ISR & I2C_ISR_NACKF)
@@ -74,7 +74,7 @@ i2c_status_t i2c_hal_open(void) {
 }
 
 i2c_status_t i2c_hal_write_byte(uint8_t slave_addr, const uint8_t data,
-                                uint8_t is_last, uint32_t timeout_ms) {
+                                uint8_t not_last, uint32_t timeout_ms) {
   i2c_status_t err;
   // NEW TRANSFER
   if (_state == I2C_STATE_IDLE) {
@@ -102,7 +102,7 @@ i2c_status_t i2c_hal_write_byte(uint8_t slave_addr, const uint8_t data,
     uint32_t CR2 = I2C1->CR2;
     CR2 &= ~(I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_AUTOEND);
     CR2 |= (1UL << I2C_CR2_NBYTES_Pos);
-    CR2 |= is_last ? I2C_CR2_AUTOEND : I2C_CR2_RELOAD;
+    CR2 |= not_last ? I2C_CR2_RELOAD : I2C_CR2_AUTOEND;
     I2C1->CR2 = CR2;
   }
 
@@ -117,7 +117,7 @@ i2c_status_t i2c_hal_write_byte(uint8_t slave_addr, const uint8_t data,
   }
 
   I2C1->TXDR = data;
-  if (is_last) {
+  if (!not_last) {
     err = i2c_wait(I2C_ISR_STOPF, timeout_ms);
     I2C1->ICR = I2C_ICR_STOPCF;
     _state = I2C_STATE_IDLE;
