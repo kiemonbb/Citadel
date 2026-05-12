@@ -3,7 +3,7 @@
 #include "stm32l031xx.h"
 
 static i2c_state_t _state = I2C_STATE_IDLE;
-extern uint32_t systick_ms;
+extern volatile uint32_t systick_ms;
 
 static i2c_status_t i2c_wait(uint32_t flag, uint32_t timeout_ms) {
   uint32_t deadline = systick_ms + timeout_ms;
@@ -77,13 +77,14 @@ i2c_status_t i2c_hal_write_byte(uint8_t slave_addr, const uint8_t data,
                                 uint8_t not_last, uint32_t timeout_ms) {
   i2c_status_t err;
   // NEW TRANSFER
+  i2c_clear_flags();
   if (_state == I2C_STATE_IDLE) {
-    i2c_clear_flags();
     if (I2C1->ISR & I2C_ISR_BUSY)
       return I2C_ERROR_BUSY;
 
     I2C1->CR2 = ((uint32_t)(slave_addr & 0x7FU) << 1U) |
-                (1UL << I2C_CR2_NBYTES_Pos) | I2C_CR2_RELOAD | I2C_CR2_START;
+                (1UL << I2C_CR2_NBYTES_Pos) |
+                (not_last ? I2C_CR2_RELOAD : I2C_CR2_AUTOEND) | I2C_CR2_START;
 
     _state = I2C_STATE_BUSY;
   } else {
@@ -130,8 +131,8 @@ i2c_status_t i2c_hal_read_byte(uint8_t slave_addr, uint8_t *data, uint8_t ack,
                                uint32_t timeout_ms) {
   i2c_status_t err;
   // NEW READ
+  i2c_clear_flags();
   if (_state == I2C_STATE_IDLE) {
-    i2c_clear_flags();
     if (I2C1->ISR & I2C_ISR_BUSY)
       return I2C_ERROR_BUSY;
 
@@ -141,7 +142,6 @@ i2c_status_t i2c_hal_read_byte(uint8_t slave_addr, uint8_t *data, uint8_t ack,
 
     _state = I2C_STATE_BUSY;
   } else {
-
     err = i2c_wait(I2C_ISR_TCR, timeout_ms);
     if (err != I2C_OK) {
       I2C1->ICR = I2C_ICR_NACKCF;
@@ -156,6 +156,7 @@ i2c_status_t i2c_hal_read_byte(uint8_t slave_addr, uint8_t *data, uint8_t ack,
     uint32_t CR2 = I2C1->CR2;
     CR2 &= ~(I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_AUTOEND);
     CR2 |= (1UL << I2C_CR2_NBYTES_Pos);
+    CR2 |= I2C_CR2_RD_WRN;
     CR2 |= ack ? I2C_CR2_RELOAD : I2C_CR2_AUTOEND;
     I2C1->CR2 = CR2;
   }
@@ -163,7 +164,7 @@ i2c_status_t i2c_hal_read_byte(uint8_t slave_addr, uint8_t *data, uint8_t ack,
   err = i2c_wait(I2C_ISR_RXNE, timeout_ms);
   if (err != I2C_OK) {
     I2C1->ICR = I2C_ICR_NACKCF;
-    I2C1->CR2 = I2C_CR2_STOP;
+    I2C1->CR2 |= I2C_CR2_STOP;
     i2c_wait(I2C_ISR_STOPF, timeout_ms);
     I2C1->ICR = I2C_ICR_STOPCF;
     _state = I2C_STATE_IDLE;
@@ -187,7 +188,7 @@ i2c_status_t i2c_hal_reg(uint8_t slave_addr, uint8_t reg_addr, uint8_t *data,
   }
 
   i2c_status_t err;
-  err = i2c_hal_write_byte(slave_addr, reg_addr, length == 0U, timeout_ms);
+  err = i2c_hal_write_byte(slave_addr, reg_addr, length > 0U, timeout_ms);
   if (err != I2C_OK)
     return err;
 
@@ -195,7 +196,7 @@ i2c_status_t i2c_hal_reg(uint8_t slave_addr, uint8_t reg_addr, uint8_t *data,
   if (!read) {
     for (size_t i = 0; i < length; i++) {
       err =
-          i2c_hal_write_byte(slave_addr, data[i], i == length - 1U, timeout_ms);
+          i2c_hal_write_byte(slave_addr, data[i], i < length - 1U, timeout_ms);
       if (err != I2C_OK)
         return err;
     }
@@ -203,6 +204,14 @@ i2c_status_t i2c_hal_reg(uint8_t slave_addr, uint8_t reg_addr, uint8_t *data,
   }
   /* READ */
   else {
+// Wait for the previous WRITE transaction to end and start a new READ one
+    i2c_wait(I2C_ISR_TCR, timeout_ms);
+    I2C1->CR2 |= I2C_CR2_STOP;
+
+    i2c_wait(I2C_ISR_STOPF, timeout_ms);
+    I2C1->ICR = I2C_ICR_STOPCF;
+    _state = I2C_STATE_IDLE;
+
     for (size_t i = 0; i < length; i++) {
       err =
           i2c_hal_read_byte(slave_addr, &data[i], i < length - 1U, timeout_ms);
