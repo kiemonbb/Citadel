@@ -24,6 +24,7 @@
 
 typedef enum {
   DS3231_OK = 0,
+  DS32321_ERROR_I2C,
   DS3231_ERROR_INVALID_PARAM,
 } ds3231_status_t;
 
@@ -31,8 +32,6 @@ typedef struct {
   uint8_t seconds;
   uint8_t minutes;
   uint8_t hour;
-  uint8_t am_pm;
-  uint8_t hour12;
 
   uint8_t day;
   uint8_t date;
@@ -40,14 +39,10 @@ typedef struct {
   uint8_t year;
 } ds3231_time_t;
 
-uint8_t ds3231_hex_to_bcd(uint8_t value);
+ds3231_status_t ds3231_set_time(const ds3231_time_t *time, uint32_t timeout_ms);
 
-uint8_t ds3231_bcd_to_hex(uint8_t value);
+ds3231_status_t ds3231_get_time(ds3231_time_t *time, uint32_t timeout_ms);
 
-ds3231_status_t ds3231_open();
-
-ds3231_status_t ds3231_write(ds3231_time_t *time);
-
-ds3231_status_t ds3231_read(ds3231_time_t *time);
+ds3231_status_t ds3231_get_temp(uint8_t *time, uint32_t timeout_ms);
 
 #endif
