@@ -16,4 +16,3 @@
 - **FR-02:** The system shall maintain time with an average accuracy of roughly ~0.17 second/day ( ~1 minute/year )
 -  **FR-03** The system shall retain clock state between power cycles.
 -  **FR-04** The system shall have a button that makes the system show the time for about 5 seconds.
--  **FR-03** The system shall retain clock state between power cycle.
