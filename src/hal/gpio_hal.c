@@ -47,7 +47,6 @@ uint32_t gpio_hal_init_input(GPIO_TypeDef *port, uint32_t pin,
     return -1;
 
   port->MODER &= ~(0x3U << (pin * 2));
-  port->MODER |= (0x1U << (pin * 2));
 
   port->PUPDR &= ~(0x3U << (pin * 2));
   port->PUPDR |= (pull << (pin * 2));

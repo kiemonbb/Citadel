@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-extern uint32_t systick_ms;
+extern volatile uint32_t systick_ms;
 
 hal_status_t spi_hal_open(spi_mode_t mode, spi_baud_divider_t baud_divider) {
   RCC->IOPENR |= RCC_IOPENR_GPIOBEN;
@@ -75,21 +75,28 @@ hal_status_t spi_hal_write(const uint8_t *data, size_t length,
     if (byte_status != HAL_OK)
       return byte_status;
   }
+  uint32_t start = systick_ms;
   /* Wait until data shifted out Data register */
-  while (!(SPI1->SR & SPI_SR_TXE))
-    ;
+  while (!(SPI1->SR & SPI_SR_TXE)) {
+    if (timeout_ms != SPI_NO_DELAY && timeout_ms != SPI_MAX_DELAY &&
+        (systick_ms - start) >= timeout_ms)
+      return HAL_ERROR_TIMEOUT;
+  }
   /* Wait until  SPI is ready */
-  while (SPI1->SR & SPI_SR_BSY)
-    ;
+  while (SPI1->SR & SPI_SR_BSY) {
+    if (timeout_ms != SPI_NO_DELAY && timeout_ms != SPI_MAX_DELAY &&
+        (systick_ms - start) >= timeout_ms)
+      return HAL_ERROR_TIMEOUT;
+  }
 
   return HAL_OK;
 }
 
 hal_status_t spi_hal_transfer_byte(uint8_t byte, uint32_t timeout_ms) {
-  uint32_t deadline = systick_ms + timeout_ms;
+  uint32_t start = systick_ms;
   while (!(SPI1->SR & SPI_SR_TXE)) {
     if ((timeout_ms == SPI_NO_DELAY) ||
-        (timeout_ms != SPI_MAX_DELAY && systick_ms >= deadline))
+        (timeout_ms != SPI_MAX_DELAY && (systick_ms - start) >= timeout_ms))
       return HAL_ERROR_TIMEOUT;
   }
   /* Fill the data register with the provided byte */
@@ -97,7 +104,7 @@ hal_status_t spi_hal_transfer_byte(uint8_t byte, uint32_t timeout_ms) {
 
   while (!(SPI1->SR & SPI_SR_RXNE)) {
     if ((timeout_ms == SPI_NO_DELAY) ||
-        (timeout_ms != SPI_MAX_DELAY && systick_ms >= deadline))
+        (timeout_ms != SPI_MAX_DELAY && (systick_ms - start) >= timeout_ms))
       return HAL_ERROR_TIMEOUT;
   }
 

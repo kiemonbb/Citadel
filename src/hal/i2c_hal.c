@@ -6,7 +6,7 @@ static i2c_state_t _state = I2C_STATE_IDLE;
 extern volatile uint32_t systick_ms;
 
 static i2c_status_t i2c_wait(uint32_t flag, uint32_t timeout_ms) {
-  uint32_t deadline = systick_ms + timeout_ms;
+  uint32_t start = systick_ms;
   while (!(I2C1->ISR & flag)) {
     if (I2C1->ISR & I2C_ISR_NACKF)
       return I2C_ERROR_NACK;
@@ -14,7 +14,7 @@ static i2c_status_t i2c_wait(uint32_t flag, uint32_t timeout_ms) {
       return I2C_ERROR_BUS;
     if (I2C1->ISR & I2C_ISR_BERR)
       return I2C_ERROR_BUS;
-    if (systick_ms >= deadline)
+    if ((systick_ms - start) >= timeout_ms)
       return I2C_ERROR_TIMEOUT;
   }
   return I2C_OK;
@@ -205,12 +205,17 @@ i2c_status_t i2c_hal_reg(uint8_t slave_addr, uint8_t reg_addr, uint8_t *data,
   /* READ */
   else {
 // Wait for the previous WRITE transaction to end and start a new READ one
-    i2c_wait(I2C_ISR_TCR, timeout_ms);
+    i2c_status_t tcr_err = i2c_wait(I2C_ISR_TCR, timeout_ms);
+    I2C1->ICR = I2C_ICR_NACKCF;
     I2C1->CR2 |= I2C_CR2_STOP;
 
-    i2c_wait(I2C_ISR_STOPF, timeout_ms);
+    err = i2c_wait(I2C_ISR_STOPF, timeout_ms);
     I2C1->ICR = I2C_ICR_STOPCF;
     _state = I2C_STATE_IDLE;
+    if (tcr_err != I2C_OK)
+      return tcr_err;
+    if (err != I2C_OK)
+      return err;
 
     for (size_t i = 0; i < length; i++) {
       err =

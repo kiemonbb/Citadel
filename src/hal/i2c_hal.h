@@ -59,7 +59,7 @@ i2c_status_t i2c_hal_open(void);
  * @return I2C_OK on success, error code on failure.
  **/
 i2c_status_t i2c_hal_write_byte(uint8_t slave_addr, const uint8_t data,
-                                uint8_t is_last, uint32_t timeout_ms);
+                                uint8_t not_last, uint32_t timeout_ms);
 
 /**
  * @brief Receive a single byte over I2C.
