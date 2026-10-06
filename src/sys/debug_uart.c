@@ -1,6 +1,9 @@
+#include "debug_uart.h"
 #include "config.h"
 #include "stm32l031xx.h"
 #include "stm32l0xx.h"
+#include <stdarg.h>
+#include <stdio.h>
 
 void uart_open(void) {
   // UART CONFIG
@@ -36,12 +39,12 @@ void uart_write(const char *data) {
 }
 
 void uart_printf(const char *fmt, ...) {
-  //   char buf[128];
-  //   va_list args;
-  //   va_start(args, fmt);
-  //   vsnprintf(buf, sizeof(buf), fmt, args);
-  //   va_end(args);
-  //   uart_write(buf);
-  //   uart_putchar('\r');
-  //   uart_putchar('\n');
+  char buf[128];
+  va_list args;
+  va_start(args, fmt);
+  vsnprintf(buf, sizeof(buf), fmt, args);
+  va_end(args);
+  uart_write(buf);
+  uart_putchar('\r');
+  uart_putchar('\n');
 }
