@@ -39,6 +39,8 @@ typedef struct {
   uint8_t year;
 } ds3231_time_t;
 
+ds3231_status_t ds3231_init(const ds3231_time_t *time, uint32_t timeout_ms);
+
 ds3231_status_t ds3231_set_time(const ds3231_time_t *time, uint32_t timeout_ms);
 
 ds3231_status_t ds3231_get_time(ds3231_time_t *time, uint32_t timeout_ms);

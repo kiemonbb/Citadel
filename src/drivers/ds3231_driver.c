@@ -10,6 +10,49 @@ static uint8_t ds3231_bcd_to_dec(uint8_t bcd) {
   return (bcd >> 4) * 10 + (bcd & 0xF);
 }
 
+ds3231_status_t ds3231_init(const ds3231_time_t *time, uint32_t timeout_ms) {
+  if (time == NULL)
+    return DS3231_ERROR_INVALID_PARAM;
+
+  // Keep the oscillator running on VBAT
+  uint8_t control = 0;
+  i2c_status_t err = i2c_hal_reg(DS3231_ADDRESS, DS3231_REG_CONTROL, &control,
+                                 1, 1, timeout_ms);
+  if (err != I2C_OK)
+    return DS3231_ERROR_I2C;
+
+  if (control & DS3231_CONTROL_NEOSC) {
+    control &= ~DS3231_CONTROL_NEOSC;
+    err = i2c_hal_reg(DS3231_ADDRESS, DS3231_REG_CONTROL, &control, 1, 0,
+                      timeout_ms);
+    if (err != I2C_OK)
+      return DS3231_ERROR_I2C;
+  }
+
+  uint8_t status = 0;
+  err = i2c_hal_reg(DS3231_ADDRESS, DS3231_REG_STATUS, &status, 1, 1,
+                    timeout_ms);
+  if (err != I2C_OK)
+    return DS3231_ERROR_I2C;
+
+  // Oscillator stopped at some point so the stored time is invalid
+  if (status & DS3231_STATUS_OSF) {
+    ds3231_status_t set_err = ds3231_set_time(time, timeout_ms);
+    if (set_err != DS3231_OK)
+      return set_err;
+    status &= ~DS3231_STATUS_OSF;
+  }
+
+  // Disable 32kHz output
+  status &= ~DS3231_STATUS_EN32kHZ;
+  err = i2c_hal_reg(DS3231_ADDRESS, DS3231_REG_STATUS, &status, 1, 0,
+                    timeout_ms);
+  if (err != I2C_OK)
+    return DS3231_ERROR_I2C;
+
+  return DS3231_OK;
+}
+
 ds3231_status_t ds3231_set_time(const ds3231_time_t *time,
                                 uint32_t timeout_ms) {
   if (time == NULL)
